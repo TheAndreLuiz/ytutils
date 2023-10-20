@@ -5,14 +5,14 @@ class Fetcher:
         self.base_url = base_url
         self.session = requests.Session()
 
-    def fetch(self, endpoint, params=None, method="GET"):
+    def fetch(self, endpoint, params=None, method='GET'):
         url = self.base_url + endpoint
-        if method == "GET":
+        if method == 'GET':
             response = self.session.get(url, params=params)
-        elif method == "POST":
+        elif method == 'POST':
             response = self.session.post(url, data=params)
         else:
-            raise ValueError("Unsupported method provided")
+            raise ValueError('Unsupported method provided')
 
         response.raise_for_status()
         

@@ -50,37 +50,6 @@ def Request(url, cont='', msg=''):
 
 def J(j, opt):
     return {
-        'x': lambda j:j['text'],
-        'q': lambda j:j['choices'],
-        'a': lambda j:j['actions'],
-        't': lambda j:j['timeoutMs'],
-        'c': lambda j:j['continuation'],
-        'u': lambda j:j['authorBadges'],
-        '0': lambda j:j['text']['runs'],
-        'o': lambda j:j['timestampUsec'],
-        'r': lambda j:j['message']['runs'],
-        'e': lambda j:j['emoji']['emojiId'],
-        'd': lambda j:j['continuations'][0],
-        'Q': lambda j:j['pollQuestion']['runs'],
-        'H': lambda j:j['headerSubtext']['runs'],
-        'i': lambda j:j['timedContinuationData'],
-        'n': lambda j:j['authorName']['simpleText'],
-        'l': lambda j:j['addChatItemAction']['item'],
-        'h': lambda j:j['liveChatTextMessageRenderer'],
-        'j': lambda j:j['header']['pollHeaderRenderer'],
-        'f': lambda j:j['contents']['liveChatRenderer'],
-        'I': lambda j:j['invalidationContinuationData'],
-        'M': lambda j:j['addLiveChatTickerItemAction']['item'],
-        'w': lambda j:j['liveChatAuthorBadgeRenderer']['tooltip'],
-        'z': lambda j:j['reloadContinuationData']['continuation'],
-        'g': lambda j:j['liveChatViewerEngagementMessageRenderer'],
-        's': lambda j:j['addLiveChatTickerItemAction']['durationSec'],
-        'v': lambda j:j['continuationContents']['liveChatContinuation'],
-        'H': lambda j:j['showItemEndpoint']['showLiveChatItemEndpoint']['renderer']['liveChatPaidStickerRenderer'],
-        'S': lambda j:j['showItemEndpoint']['showLiveChatItemEndpoint']['renderer']['liveChatMembershipItemRenderer'],
-        'k': lambda j:j['showLiveChatActionPanelAction']['panelToShow']['liveChatActionPanelRenderer']['contents']['pollRenderer'],
-        'b': lambda j:j['addBannerToLiveChatCommand']['bannerRenderer']['liveChatBannerRenderer']['contents']['liveChatTextMessageRenderer']['message']['runs'],
-        'p': lambda j:j['actionPanel']['liveChatMessageInputRenderer']['sendButton']['buttonRenderer']['serviceEndpoint']['sendLiveChatMessageEndpoint']['params']
     }.get(opt)(j)
 
 def InitialData(url):
