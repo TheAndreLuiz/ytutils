@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import os, sys, json, requests
 
 key = 'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8'
@@ -328,3 +326,4 @@ else:
 # create folder inside /tmp/ytutils for respective search
 # related videos
 # func to return first result, no matter what, to get video wanted or whatever
+# related videos
