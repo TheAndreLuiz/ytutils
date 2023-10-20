@@ -1,6 +1,6 @@
 import requests
 
-class DataFetcher:
+class Fetcher:
     def __init__(self, base_url):
         self.base_url = base_url
         self.session = requests.Session()
@@ -14,7 +14,7 @@ class DataFetcher:
         else:
             raise ValueError("Unsupported method provided")
 
-        response.raise_for_status()  # Raise an HTTPError if one occurred.
+        response.raise_for_status()
         
         return response.json()
 
