@@ -1,5 +1,3 @@
-import os, sys, json, requests
-
 key = 'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8'
 keyUrl = 'https://www.youtube.com/youtubei/v1/{}?key=' + key
 
@@ -15,47 +13,6 @@ vUrl = 'https://youtu.be/'
 
 ads = False
 didYouMean = False
-thumbsPath = '/tmp/ytUtils/'
-
-def Help():
-    print('blah can use -something to do not include search results with something')
-
-def J(j, opt):
-    return { # clear this
-        'sc': lambda j:j['sectionListRenderer']['contents'][0]['itemSectionRenderer']['contents'][0]['playlistVideoListRenderer'],
-        'co': lambda j:j['sidebar']['playlistSidebarRenderer']['items'][0]['playlistSidebarPrimaryInfoRenderer']['stats'][0],
-        'tr': lambda j:j['contents']['twoColumnWatchNextResults']['secondaryResults']['secondaryResults']['results'],
-        'ct': lambda j:j['contents']['twoColumnSearchResultsRenderer']['primaryContents']['sectionListRenderer'],
-        'ea': lambda j:j['onResponseReceivedEndpoints'][0]['appendContinuationItemsAction']['continuationItems'],
-        'oa': lambda j:j['onResponseReceivedCommands'][0]['appendContinuationItemsAction']['continuationItems'],
-        'aa': lambda j:j['onResponseReceivedActions'][0]['appendContinuationItemsAction']['continuationItems'],
-        'ci': lambda j:j['contents']['twoColumnSearchResultsRenderer']['primaryContents']['richItemRenderer'],
-        'cc': lambda j:j['continuationItemRenderer']['continuationEndpoint']['continuationCommand']['token'],
-        'tc': lambda j:j['contents']['twoColumnBrowseResultsRenderer']['tabs'][0]['tabRenderer']['content'],
-        'vv': lambda j:j['viewCount']['videoViewCountRenderer']['viewCount']['simpleText'],
-        '': lambda j:j['results']['results']['contents'][0]['videoPrimaryInfoRenderer'], # title: title runs 0
-        'ap': lambda j:j['searchPyvRenderer']['ads'][0]['promotedVideoRenderer'],
-        'mc': lambda j:j['metadata']['channelMetadataRenderer']['channelUrl'],
-        'vi': lambda j:j['content']['verticalListRenderer']['items'],
-        '': lambda j:j['contents']['twoColumnWatchNextResults'],
-        'ic': lambda j:j[0]['itemSectionRenderer']['contents'],
-        'gc': lambda j:j['richGridRenderer']['contents'],
-        'rc': lambda j:j['richItemRenderer']['content'],
-        'ca': lambda j:j['compactRadioRenderer'],
-        'cv': lambda j:j['compactVideoRenderer'],
-        'ts': lambda j:j['title']['simpleText'],
-        'pr': lambda j:j['playlistRenderer'],
-        'rt': lambda j:j['runs'][0]['text'],
-        'cr': lambda j:j['channelRenderer'],
-        'rr': lambda j:j['radioRenderer'],
-        'vr': lambda j:j['videoRenderer'],
-        'sr': lambda j:j['shelfRenderer'],
-        'pd': lambda j:j['playlistId'],
-        'cd': lambda j:j['channelId'],
-        'vd': lambda j:j['videoId'],
-        'c':  lambda j:j['contents'],
-        't':  lambda j:j['title']
-    }.get(opt)(j)
 
 def Request(url, cont=''):
     if cont:
@@ -320,10 +277,3 @@ if __name__ == '__main__' and len(sys.argv) > 1:
     Mode(sys.argv[1:])
 else:
     Help()
-
-# comments
-# search in channel
-# create folder inside /tmp/ytutils for respective search
-# related videos
-# func to return first result, no matter what, to get video wanted or whatever
-# related videos

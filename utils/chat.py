@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import re, sys, json, time, threading, curses.textpad, curses, requests
 from colorama import Fore, Back, Style
 
