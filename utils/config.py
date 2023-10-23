@@ -19,9 +19,15 @@ class Config:
     def setDefaultConfig(self):
         config = configparser.ConfigParser()
         config['DEFAULT'] = {
-            'a': 'false',
-            'b': 'true',
-            'c': 'false'
+            'showMsg':'True',
+            'showPoll':'False',
+            'showAuthor':'True',
+            'showBadges':'True',
+            'showBanner':'False',
+            'showWarning':'False',
+            'showBadgedOnly':'False',
+            'showMemberOnly':'False',
+            'showBadgedNotMemberOnly':'False',
         }
         self._setConfig(config)
 

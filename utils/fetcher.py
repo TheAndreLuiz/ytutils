@@ -5,6 +5,7 @@ class Fetcher:
         self.base_url = base_url
         self.session = requests.Session()
 
+
     def fetch(self, endpoint, params=None, method='GET'):
         url = self.base_url + endpoint
         if method == 'GET':
@@ -17,6 +18,7 @@ class Fetcher:
         response.raise_for_status()
         
         return response.json()
+
 
     def close(self):
         self.session.close()
