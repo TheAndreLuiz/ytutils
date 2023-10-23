@@ -17,6 +17,7 @@ def parseArguments():
     parser.add_argument("-sw", "--show-warning", help="Show warning", action="store_true")
     parser.add_argument("-fm", "--filter-msg", help="Filter message", metavar="FILTER_MSG")
     parser.add_argument("-fn", "--filter-name", help="Filter name", metavar="FILTER_NAME")
+    parser.add_argument("--debug", help="Test", metavar="FILTER_NAME")
 
     return parser.parse_args()
 

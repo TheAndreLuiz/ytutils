@@ -1,3 +1,4 @@
+import json
 from fetcher import Fetcher
 
 class Common:
