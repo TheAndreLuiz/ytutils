@@ -14,7 +14,7 @@ class Common:
         return self.key
 
 
-    def InitialData(self, url):
+    def initialData(self, url):
         html = self._fetcher.fetch(url)
         start = html.find('var ytInitialData = ') + 20
         end = html.find('};', start)

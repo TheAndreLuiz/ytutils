@@ -6,5 +6,5 @@ class Playlist:
 
     def PlaylistCount(self, url):
         if not '/playlist?' in url: url = pUrl + 'UU' + url.split('/UC')[1]
-        json = InitialData(url)
-        yield J(J(json,'co'),'rt')
+        json = initialData(url)
+        yield parser.parseJson(parser.parseJson(json,'co'),'rt')

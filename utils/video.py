@@ -1,5 +1,6 @@
 from utils.common import Common
 from utils.config import Config
+from utils.parser import Parser
 
 
 class Video:
@@ -7,88 +8,89 @@ class Video:
     #sUrl = 'https://www.youtube.com/results?search_query='
     #tUrl = 'https://img.youtube.com/vi/{}/mqdefault.jpg'
     #pUrl = 'https://youtube.com/playlist?list='
-    #cUrl = 'https://www.youtube.com/channel/'
     #vUrl = 'https://youtu.be/'
 
 
     def __init__(self):
-        self.common = Common()
-        self.config = Config()
-
         keyUrl = 'https://www.youtube.com/youtubei/v1/{}?key=' + self.common.getKey()
         self.searchKey = self.keyUrl.format('search')
         self.browseKey = self.keyUrl.format('browse')
         self.nextKey = self.keyUrl.format('next')
 
 
-    def DownloadImage(videoId, path):
+    def DownloadImage(self, videoId, path):
         url = tUrl.format(videoId)
         data = requests.get(url).content
         open(path, 'wb').write(data)
 
-    def ContRelatedVideos(json, cont=True):
+    def ContRelatedVideos(self, json, cont=True):
+        parser = Parser()
         try:
-            if cont: json = J(json,'ea')
-            else: json = J(json,'tr')
-            return J(json[-1],'cc')
+            if cont: json = parser.parseJson(json,'ea')
+            else: json = parser.parseJson(json,'tr')
+            return parser.parseJson(json[-1],'cc')
         except: return ''
 
-    def ContSearch(json, cont=True): # n vai dar pro richItemRenderer, o continuationItem eh o ultimo pq eh tudo junto, n um [0] e um [1]
+    def ContSearch(self, json, cont=True): # n vai dar pro richItemRenderer, o continuationItem eh o ultimo pq eh tudo junto, n um [0] e um [1]
+        parser = Parser()
         try:
-            if cont: return J(J(json,'oa')[1],'cc')
-            else: return J(J(J(json,'ct'),'c')[1],'cc')
+            if cont: return parser.parseJson(parser.parseJson(json,'oa')[1],'cc')
+            else: return parser.parseJson(parser.parseJson(parser.parseJson(json,'ct'),'c')[1],'cc')
         except: return ''
 
 
-    def ContVideos(json, cont=True):
+    def ContVideos(self, json, cont=True):
+        parser = Parser()
         try:
-            if cont: json = J(json,'aa')
-            else: json = J(J(J(json,'tc'),'sc'),'c')
-            return J(json[len(json)-1],'cc')
+            if cont: json = parser.parseJson(json,'aa')
+            else: json = parser.parseJson(parser.parseJson(parser.parseJson(json,'tc'),'sc'),'c')
+            return parser.parseJson(json[len(json)-1],'cc')
         except: return ''
 
-    def RelatedVideos(json, cont=True):
+    def RelatedVideos(self, json, cont=True):
         videos = {}
+        parser = Parser()
         try:
-            if cont: json = J(json,'ea')
-            else: json = J(json,'tr')
+            if cont: json = parser.parseJson(json,'ea')
+            else: json = parser.parseJson(json,'tr')
         except: pass
         for item in json:
             key = list(item)[0]
             if key == 'compactVideoRenderer':
-                videos[J(J(item,'cv'),'ts')] = vUrl + J(J(item,'cv'),'vd')
+                videos[parser.parseJson(parser.parseJson(item,'cv'),'ts')] = vUrl + parser.parseJson(parser.parseJson(item,'cv'),'vd')
             elif key == 'compactRadioRenderer':
-                videos[J(J(item,'ca'),'ts')] = pUrl + J(J(item,'ca'),'pd')
+                videos[parser.parseJson(parser.parseJson(item,'ca'),'ts')] = pUrl + parser.parseJson(parser.parseJson(item,'ca'),'pd')
         return videos
 
-    def SearchResultsParser(item):
+    def SearchResultsParser(self, item):
         key = list(item.keys())[0]
         results = {}
+        parser = Parser()
         if key == 'videoRenderer':
-            results[J(J(J(item,'vr'),'t'),'rt')] = vUrl + J(J(item,'vr'),'vd')
+            results[parser.parseJson(parser.parseJson(parser.parseJson(item,'vr'),'t'),'rt')] = vUrl + parser.parseJson(parser.parseJson(item,'vr'),'vd')
         elif key == 'playlistRenderer':
-            results[J(J(item,'pr'),'ts')] = pUrl + J(J(item,'pr'),'pd')
+            results[parser.parseJson(parser.parseJson(item,'pr'),'ts')] = pUrl + parser.parseJson(parser.parseJson(item,'pr'),'pd')
         elif key == 'radioRenderer':
-            results[J(J(item,'rr'),'ts')] = pUrl + J(J(item,'rr'),'pd')
+            results[parser.parseJson(parser.parseJson(item,'rr'),'ts')] = pUrl + parser.parseJson(parser.parseJson(item,'rr'),'pd')
         elif key == 'channelRenderer':
-            results[J(J(item,'cr'),'ts')] = cUrl + J(J(item,'cr'),'cd')
+            results[parser.parseJson(parser.parseJson(item,'cr'),'ts')] = cUrl + parser.parseJson(parser.parseJson(item,'cr'),'cd')
         elif key == 'horizontalCardListRenderer':
             text = ''
             for card in item['horizontalCardListRenderer']['cards']:
-                text += J(card['searchRefinementCardRenderer']['query'],'rt') + ' '
+                text += parser.parseJson(card['searchRefinementCardRenderer']['query'],'rt') + ' '
                 try:
                     query = item['horizontalCardListRenderer']['header']['richListHeaderRenderer']['title']['runs'][1]['text']
                     results['Pesquisas relacionadas a: "' + query + '"'] = text
                 except:
                     results['Tambem pesquisaram por: '] = text
         elif key == 'shelfRenderer':
-            string = J(J(item,'sr'),'ts')
-            for item in J(J(item,'sr'),'vi'):
-                results[string + ': ' + J(J(J(item,'vr'),'t'),'rt')] \
-                = vUrl + J(J(item,'vr'),'vd')
+            string = parser.parseJson(parser.parseJson(item,'sr'),'ts')
+            for item in parser.parseJson(parser.parseJson(item,'sr'),'vi'):
+                results[string + ': ' + parser.parseJson(parser.parseJson(parser.parseJson(item,'vr'),'t'),'rt')] \
+                = vUrl + parser.parseJson(parser.parseJson(item,'vr'),'vd')
         elif key == 'searchPyvRenderer': # do like didYouMeanRenderer
             if ads:
-                results['Ad: '+J(J(item,'ap'),'ts')] = vUrl + J(item,'ap')['videoId']
+                results['Ad: '+parser.parseJson(parser.parseJson(item,'ap'),'ts')] = vUrl + parser.parseJson(item,'ap')['videoId']
         elif key == 'movieRenderer': print('movie')
         elif key == 'backgroundPromoRenderer': print('Nenhum resuldado encontrado')
         elif key == 'didYouMeanRenderer': print('todo') if didYouMean else print('-')
@@ -106,35 +108,37 @@ class Video:
             input()
         return results
 
-    def SearchResults(json, cont=True): # aqui
+    def SearchResults(self, json, cont=True): # aqui
         results = {}
+        parser = Parser()
         if cont:
-            json = J(json,'oa') # try except pass? printar nessa situacao se ele foi pro richItemRenderer 'rc', fica dando erro no 'ao'
+            json = parser.parseJson(json,'oa') # try except pass? printar nessa situacao se ele foi pro richItemRenderer 'rc', fica dando erro no 'ao'
             if len(json) > 2:
                 print('----------------------')
                 input()
-                for item in json: results.update(SearchResultsParser(J(item,'rc')))
+                for item in json: results.update(SearchResultsParser(parser.parseJson(item,'rc')))
                 return results
             else:
-                json = J(json,'ic')
+                json = parser.parseJson(json,'ic')
         else:
-            json = J(J(J(json,'ct'),'c'),'ic') # richGridRenderer, q num for com numeros 0 1 2 tem richItemRenderer content e dai videoRenderer
+            json = parser.parseJson(parser.parseJson(parser.parseJson(json,'ct'),'c'),'ic') # richGridRenderer, q num for com numeros 0 1 2 tem richItemRenderer content e dai videoRenderer
             #print(list(json)[-1])
         for item in json: results.update(SearchResultsParser(item))
         return results
 
-    def Videos(json, cont=True):
+    def Videos(self, json, cont=True):
         videos = {}
-        if cont: json = J(json,'aa')
-        else: json = J(J(J(json,'tc'),'sc'),'c')
+        parser = Parser()
+        if cont: json = parser.parseJson(json,'aa')
+        else: json = parser.parseJson(parser.parseJson(parser.parseJson(json,'tc'),'sc'),'c')
         try:
-            for item in json: videos[J(J(item['playlistVideoRenderer'],'t'),'rt')] \
+            for item in json: videos[parser.parseJson(parser.parseJson(item['playlistVideoRenderer'],'t'),'rt')] \
             = vUrl + item['playlistVideoRenderer']['videoId']
         except: pass
         return videos
 
-    def MainRelatedVideos(url):
-        json_ = InitialData(url)
+    def MainRelatedVideos(self, url):
+        json_ = initialData(url)
         videos = RelatedVideos(json_, False)
         for video in videos: yield video + ' ' + videos[video]
         cont = ContRelatedVideos(json_, False)
@@ -145,7 +149,7 @@ class Video:
             for video in videos: yield video + ' ' + videos[video]
             cont = ContRelatedVideos(json_)
 
-    def MainSearch(args, count=-1):
+    def MainSearch(self, args, count=-1):
         opts = {'-exact':'&sp=QgIIAQ','-playlists':'&sp=EgIQAw','-channels':'&sp=EgIQAg','-date':'&sp=CAI'}
         for opt in opts:
             if opt in args:
@@ -156,7 +160,7 @@ class Video:
         for a in args: sUrl += a + '+'
         sUrl = sUrl[:-1]
 
-        json_ = InitialData(sUrl)
+        json_ = initialData(sUrl)
         results = SearchResults(json_, False)
         for result in results: yield result + ' ' + results[result]
         cont = ContSearch(json_, False)
@@ -168,11 +172,11 @@ class Video:
             cont = ContSearch(json_)
             count -= 1
 
-    def MainVideos(args, count=-1):
+    def MainVideos(self, args, count=-1):
         url = args[-1]
         if not '/playlist?' in args[-1]: url = pUrl + 'UU' + url.split('/UC')[1]
 
-        json_ = InitialData(url)
+        json_ = initialData(url)
         videos = Videos(json_, False)
         for video in videos: yield video + ' ' + videos[video]
         cont = ContVideos(json_, False)
@@ -184,7 +188,7 @@ class Video:
             cont = ContVideos(json_)
             count -= 1
 
-    def MainThumbs(args, cont):
+    def MainThumbs(self, args, cont):
         func = MainVideos(args, cont)
         while True:
             try:

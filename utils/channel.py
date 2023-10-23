@@ -1,18 +1,22 @@
+from utils.common import Common
+
+
 class Channel:
 
 
     def __init__(self):
-        pass
+        self.common = Common()
 
 
+    #cUrl = 'https://www.youtube.com/channel/'
     def ChannelId(self, url): #TODO url check
-        json = InitialData(url)
-        yield J(json,'mc')
+        json = self.common.initialData(url)
+        yield parser.parseJson(json,'mc')
 
 
     def MainRelatedChannels(self, url): #TODO url check
         if not '/channels' in url: url += '/channels'
-        json_ = InitialData(url)
+        json_ = initialData(url)
         channels = RelatedChannels(json_, False)
         for channel in channels: print(channel + ' ' + channels[channel])
         cont = ContChannel(json_, False)
@@ -29,10 +33,10 @@ class Channel:
         for a in args: sUrl += a + '+'
         sUrl = sUrl[:-1]
 
-        json = InitialData(sUrl)
-        json = J(J(J(json,'ct'),'c'),'ic')[0]
+        json = initialData(sUrl)
+        json = parser.parseJson(parser.parseJson(parser.parseJson(json,'ct'),'c'),'ic')[0]
 
         key = list(json.keys())[0]
         if key == 'channelRenderer':
-            yield J(J(json,'cr'),'ts') + ' ' + cUrl + J(J(json,'cr'),'cd')
+            yield parser.parseJson(parser.parseJson(json,'cr'),'ts') + ' ' + cUrl + parser.parseJson(parser.parseJson(json,'cr'),'cd')
         else: yield 'O canal nao foi encontrado'

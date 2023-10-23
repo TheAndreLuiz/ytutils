@@ -1,5 +1,6 @@
 import re, sys, json, time, threading, curses.textpad, curses, requests
 from utils.config import Config
+from utils.parser import Parser
 from colorama import Fore, Back, Style
 
 
@@ -9,28 +10,29 @@ class Chat:
     def __init__(self):
         self.sleep = lambda i:time.sleep(i)
         self.screen = ''
-        self.config = Config()
-
 
 
     def ContinuationData(i,json):
-        j = J(J(json,i),'d')
+        parser = Parser()
+        j = parser.parseJson(parser.parseJson(json,i),'d')
         if list(j.keys())[0] == 'invalidationContinuationData':
-            j = J(j,'I')
+            j = parser.parseJson(j,'I')
         else:
-            j = J(j,'i')
+            j = parser.parseJson(j,'i')
         return j
 
 
     def TextContent(item):
         key = list(item.keys())[0]
+        parser = Parser()
         return {
-            'text': lambda i:J(i,'x'),
-            'emoji': lambda i:re.sub(r'^UC+\S+','⬚', J(i,'e'))
+            'text': lambda i:parser.parseJson(i,'x'),
+            'emoji': lambda i:re.sub(r'^UC+\S+','⬚', parser.parseJson(i,'e'))
         }.get(key)(item)
 
 
     def Id(url):
+        parser = Parser()
         try:
             return re.findall(ytUrlRgx, url)[0]
         except:
@@ -41,19 +43,20 @@ class Chat:
         if not showBanner:
             return ''
         msg = ''
-        for part in J(item,'b'):
+        for part in parser.parseJson(item,'b'):
             msg = msg + TextContent(part)
         return msg + spacingFormat + '\n'
 
 
     def Pool(item):
         entry = ''
-        for part in J(J(item,'j'),'Q'):
+        parser = Parser()
+        for part in parser.parseJson(parser.parseJson(item,'j'),'Q'):
             entry = entry + TextContent(part)
         entry = entry + '\n'
-        for part in J(item,'q'):
+        for part in parser.parseJson(item,'q'):
             string = ''
-            for i in J(part,'0'):
+            for i in parser.parseJson(part,'0'):
                 string = string + TextContent(i)
             entry = entry + string + '\n'
         return entry
@@ -61,16 +64,17 @@ class Chat:
 
     def Ticker(item):
         key = list(item.keys())[0]
+        parser = Parser()
         try:
             if key == 'liveChatTickerSponsorItemRenderer':
-                item = J(item,'S')
-                string = 'New member: ' + J(item,'n') + '. '
-                for part in J(item,'H'):
+                item = parser.parseJson(item,'S')
+                string = 'New member: ' + parser.parseJson(item,'n') + '. '
+                for part in parser.parseJson(item,'H'):
                     string = string + TextContent(part)
                 return string
             elif key == 'liveChatTickerPaidStickerItemRenderer':
                 print('www')
-                print(J(item,'H'))
+                print(parser.parseJson(item,'H'))
             else:
                 print('*******************')
                 return key
@@ -81,12 +85,13 @@ class Chat:
 
     def Msg(item):
         key = list(item.keys())[0]
+        parser = Parser()
         if key == 'liveChatViewerEngagementMessageRenderer' and showWarning:
-            return J(J(J(item,'g'),'r')[0],'x') + spacingFormat + '\n'
+            return parser.parseJson(parser.parseJson(parser.parseJson(item,'g'),'r')[0],'x') + spacingFormat + '\n'
         elif key == 'liveChatTextMessageRenderer':
-            item = J(item,'h')
+            item = parser.parseJson(item,'h')
             author = ''
-            try: author = J(item,'n')
+            try: author = parser.parseJson(item,'n')
             except KeyError: pass
 
             if author in blockedUsers: return ''
@@ -94,8 +99,8 @@ class Chat:
 
             badges = ''
             try:
-                for badge in J(item,'u'):
-                    badges = badges + badgesFormat.format(badge=J(badge,'w'))
+                for badge in parser.parseJson(item,'u'):
+                    badges = badges + badgesFormat.format(badge=parser.parseJson(badge,'w'))
                 if showMemberOnly and 'Member' not in badges:
                     return ''
                 if showBadgedNotMemberOnly and 'Member' in badges:
@@ -109,7 +114,7 @@ class Chat:
                 author = modNameColor + author + Style.RESET_ALL
 
             msg = ''
-            for part in J(item,'r'):
+            for part in parser.parseJson(item,'r'):
                 msg = msg + TextContent(part)
             if filterMsg != '' and filterMsg not in msg: return ''
 
@@ -124,17 +129,18 @@ class Chat:
 
     def ChatItem(item): # TODO
         key = list(item.keys())[0]
+        parser = Parser()
         if key == 'clickTrackingParams':
             key = list(item.keys())[1]
         match key: # if to support < 3.10?
             case 'addBannerToLiveChatCommand':
                 return Banner(item)
             case 'addChatItemAction':
-                return Msg(J(item,'l'))
+                return Msg(parser.parseJson(item,'l'))
             case 'showLiveChatActionPanelAction':
-                return Pool(J(item,'k'))
+                return Pool(parser.parseJson(item,'k'))
             case 'addLiveChatTickerItemAction':
-                return Ticker(J(item,'M'))
+                return Ticker(parser.parseJson(item,'M'))
             case 'liveChatViewerEngagementMessageRenderer':
                 return item
             case 'showLiveChatTooltipCommand':
@@ -151,9 +157,10 @@ class Chat:
 
     def SendMsg(url, msg):
         id = Id(url)
+        parser = Parser()
         url = chatUrl.format(id)
-        json_ = InitialData(url)
-        params = J(J(json_,'f'),'p')
+        json_ = initialData(url)
+        params = parser.parseJson(parser.parseJson(json_,'f'),'p')
         Request(msgUrl,'',msgData.format(params,msg))
 
 
@@ -175,28 +182,29 @@ class Chat:
 
 
     def Main():
+        parser = Parser()
         id = Id(sys.argv[1])
         url = chatUrl.format(id)
-        json_ = InitialData(url)
+        json_ = initialData(url)
 
         j = ContinuationData('f',json_)
-        cont = J(j,'c')
+        cont = parser.parseJson(j,'c')
 
-        for item in J(J(json_,'f'),'a'):
+        for item in parser.parseJson(parser.parseJson(json_,'f'),'a'):
             print(ChatItem(item), end='')
 
         while True:
             request = Request(url,cont)
             json_ = json.loads(request)
             actions = ''
-            timeout = J(j,'t')
+            timeout = parser.parseJson(j,'t')
             timeout = timeout/1000
 
             j = ContinuationData('v',json_)
-            cont = J(j,'c')
+            cont = parser.parseJson(j,'c')
 
             try:
-                actions = J(J(json_,'v'),'a')
+                actions = parser.parseJson(parser.parseJson(json_,'v'),'a')
             except KeyError:
                 time.sleep(timeout)
                 continue
