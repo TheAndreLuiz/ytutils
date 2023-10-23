@@ -28,6 +28,21 @@ class Config:
             'showBadgedOnly':'False',
             'showMemberOnly':'False',
             'showBadgedNotMemberOnly':'False',
+            'msgFormat':'author badges | msg',
+            'badgesFormat':'[badge]',
+            'spacingFormat':'\n',
+            'filterMsg':'',
+            'filterName':'',
+            'blockedUsers':'',
+            'msgColor':'Fore.WHITE',
+            'modNameColor':'Fore.BLUE',
+            'membersNameColor':'Fore.GREEN',
+            'ytKey':'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8',
+            'chatUrl':'https://www.youtube.com/live_chat?v=',
+            'msgUrl':'https://www.youtube.com/youtubei/v1/live_chat/send_message?key={}'.format(ytKey),
+            'contChatUrl': 'https://www.youtube.com/youtubei/v1/live_chat/get_live_chat?key={}'.format(ytKey),
+            'ytUrlRgx':'^(?:https?:)?//[^/]*(?:youtube(?:-nocookie)?\.com|youtu\.be).*[=/]([-\\w]{11})(?:\\?|=|&|$)',
+            'postData':'{{"context":{{"client":{{"hl":"en","gl":"US","clientName":"WEB","clientVersion":"2.20211221.00.00"}}}},"continuation":"{}"}}',
         }
         self._setConfig(config)
 
