@@ -1,19 +1,24 @@
+from utils.common import Common
+from utils.config import Config
+
+
 class Video:
+
+    #sUrl = 'https://www.youtube.com/results?search_query='
+    #tUrl = 'https://img.youtube.com/vi/{}/mqdefault.jpg'
+    #pUrl = 'https://youtube.com/playlist?list='
+    #cUrl = 'https://www.youtube.com/channel/'
+    #vUrl = 'https://youtu.be/'
+
+
     def __init__(self):
-        pass
+        self.common = Common()
+        self.config = Config()
 
-    key = 'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8'
-    keyUrl = 'https://www.youtube.com/youtubei/v1/{}?key=' + key
-
-    searchKey = keyUrl.format('search')
-    browseKey = keyUrl.format('browse')
-    nextKey = keyUrl.format('next')
-
-    sUrl = 'https://www.youtube.com/results?search_query='
-    tUrl = 'https://img.youtube.com/vi/{}/mqdefault.jpg'
-    pUrl = 'https://youtube.com/playlist?list='
-    cUrl = 'https://www.youtube.com/channel/'
-    vUrl = 'https://youtu.be/'
+        keyUrl = 'https://www.youtube.com/youtubei/v1/{}?key=' + self.common.getKey()
+        self.searchKey = self.keyUrl.format('search')
+        self.browseKey = self.keyUrl.format('browse')
+        self.nextKey = self.keyUrl.format('next')
 
 
     def DownloadImage(videoId, path):

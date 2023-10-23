@@ -1,5 +1,9 @@
 class Parser:
-    def parseJson(json, option):
+    def __init__(self):
+        pass
+
+
+    def parseJson(self, json, option):
         return {
             'p':  lambda json:json['actionPanel']['liveChatMessageInputRenderer']['sendButton']['buttonRenderer']['serviceEndpoint']['sendLiveChatMessageEndpoint']['params'],
             'b':  lambda json:json['addBannerToLiveChatCommand']['bannerRenderer']['liveChatBannerRenderer']['contents']['liveChatTextMessageRenderer']['message']['runs'],
