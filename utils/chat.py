@@ -310,27 +310,3 @@ def Main(): # refactor
             print(ChatItem(item), end='')
             time.sleep(delay)
         td.join()
-
-if __name__ == '__main__' and len(sys.argv) > 1:
-    args = sys.argv[1:]
-    if '-s' in args or '--send' in args:
-        SendMsg(args[0], args[args.index('-s') + 1] if '-s' in args else args[args.index('--send') + 1])
-    elif '-c' in args:
-        curses.wrapper(Curses)
-    else:
-        if '-sp' in args or '--show-poll' in args:
-            showPoll = True
-        if '-sb' in args or '--show-banner' in args:
-            showBanner = True
-        if '-sw' in args or '--show-warning' in args:
-            showWarning = True
-        if '-fm' in args or '--filter-msg' in args:
-            filterMsg = args[args.index('-fm') + 1 if '-fm' in args else args.index('--filter-msg') + 1]
-        if '-fn' in args or '--filter-name' in args:
-            filterName = args[args.index('-fn') + 1 if '-fn' in args else args.index('--filter-name') + 1]
-        try:
-            Main()
-        except KeyboardInterrupt:
-            sys.exit()
-else:
-    Help()

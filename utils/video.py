@@ -14,13 +14,6 @@ vUrl = 'https://youtu.be/'
 ads = False
 didYouMean = False
 
-def Request(url, cont=''):
-    if cont:
-        data = ('{"context":{"client":{"clientName":"WEB","clientVersion":"2.20210120.08.00", \
-        }},"continuation":"') + cont + '"}'
-        return requests.post(url, data=data).text
-    return requests.get(url).text
-
 def DownloadImage(videoId, path):
     url = tUrl.format(videoId)
     data = requests.get(url).content
@@ -36,10 +29,6 @@ def PlaylistCount(url):
     if not '/playlist?' in url: url = pUrl + 'UU' + url.split('/UC')[1]
     json = InitialData(url)
     yield J(J(json,'co'),'rt')
-
-def ChannelId(url): #TODO url check
-    json = InitialData(url)
-    yield J(json,'mc')
 
 def ContRelatedVideos(json, cont=True):
     try:
@@ -74,19 +63,6 @@ def RelatedVideos(json, cont=True):
         elif key == 'compactRadioRenderer':
             videos[J(J(item,'ca'),'ts')] = pUrl + J(J(item,'ca'),'pd')
     return videos
-
-def SearchChannel(args):
-    global sUrl
-    for a in args: sUrl += a + '+'
-    sUrl = sUrl[:-1]
-
-    json = InitialData(sUrl)
-    json = J(J(J(json,'ct'),'c'),'ic')[0]
-
-    key = list(json.keys())[0]
-    if key == 'channelRenderer':
-        yield J(J(json,'cr'),'ts') + ' ' + cUrl + J(J(json,'cr'),'cd')
-    else: yield 'O canal nao foi encontrado'
 
 def SearchResultsParser(item):
     key = list(item.keys())[0]
@@ -159,19 +135,6 @@ def Videos(json, cont=True):
         = vUrl + item['playlistVideoRenderer']['videoId']
     except: pass
     return videos
-
-def MainRelatedChannels(url): #TODO url check
-    if not '/channels' in url: url += '/channels'
-    json_ = InitialData(url)
-    channels = RelatedChannels(json_, False)
-    for channel in channels: print(channel + ' ' + channels[channel])
-    cont = ContChannel(json_, False)
-    while cont:
-        json_ = Request(browseKey, cont)
-        json_ = json.loads(json_)
-        channels = RelatedChannels(json_)
-        for channel in channels: print(channel + ' ' + channels[channel])
-        cont = ContChannel(json)
 
 def MainRelatedVideos(url):
     json_ = InitialData(url)
@@ -247,5 +210,3 @@ def Main(func, thumbs=False):
             DownloadImage(videoId, thumbsPath + '"' + name + videoId + '"')
     else:
         while True: print(next(func))
-
-def Mode(args):
