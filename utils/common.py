@@ -5,6 +5,7 @@ class Common:
     def __init__(self):
         self._fetcher = Fetcher()
 
+    #'ytUrlRgx':'^(?:https?:)?//[^/]*(?:youtube(?:-nocookie)?\.com|youtu\.be).*[=/]([-\\w]{11})(?:\\?|=|&|$)',
 
     def InitialData(self, url):
         html = self._fetcher.fetch(url)

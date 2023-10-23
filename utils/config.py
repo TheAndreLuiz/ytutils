@@ -41,8 +41,8 @@ class Config:
             'chatUrl':'https://www.youtube.com/live_chat?v=',
             'msgUrl':'https://www.youtube.com/youtubei/v1/live_chat/send_message?key={}'.format(ytKey),
             'contChatUrl': 'https://www.youtube.com/youtubei/v1/live_chat/get_live_chat?key={}'.format(ytKey),
-            'ytUrlRgx':'^(?:https?:)?//[^/]*(?:youtube(?:-nocookie)?\.com|youtu\.be).*[=/]([-\\w]{11})(?:\\?|=|&|$)',
-            'postData':'{{"context":{{"client":{{"hl":"en","gl":"US","clientName":"WEB","clientVersion":"2.20211221.00.00"}}}},"continuation":"{}"}}',
+            'ads':'False',
+            'didYouMean':'False',
         }
         self._setConfig(config)
 

@@ -15,8 +15,6 @@ class Video:
     cUrl = 'https://www.youtube.com/channel/'
     vUrl = 'https://youtu.be/'
 
-    ads = False
-    didYouMean = False
 
     def DownloadImage(videoId, path):
         url = tUrl.format(videoId)
@@ -35,6 +33,7 @@ class Video:
             if cont: return J(J(json,'oa')[1],'cc')
             else: return J(J(J(json,'ct'),'c')[1],'cc')
         except: return ''
+
 
     def ContVideos(json, cont=True):
         try:
