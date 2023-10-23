@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-
-
 import argparse
-from utils import *
+from utils.config import Config
 
 
 def help():
@@ -23,9 +21,7 @@ def parseArguments():
     return parser.parse_args()
 
 
-def main():
-    args = parseArguments()
-
+def mode(args):
     if args.send:
         pass
     else:
@@ -39,6 +35,30 @@ def main():
             filterMsg = args.filter_msg
         if args.filter_name:
             filterName = args.filter_name
+    if thumbs:
+        if not os.path.isdir(thumbsPath): os.mkdir(thumbsPath)
+        while True:
+            video = next(func)
+            if '/channel' in video or '/playlist' in video: continue
+            split = video.split(vUrl)
+            name = split[0].replace("/","")
+            videoId = split[1]
+            print(name + vUrl + videoId) #async
+            DownloadImage(videoId, thumbsPath + '"' + name + videoId + '"')
+    else:
+        while True: print(next(func))
+
+
+def main():
+    config = Config()
+    if config.checkConfigFile():
+        config.loadConfigFile()
+    else:
+        config.setDefaultConfig()
+
+    args = parseArguments()
+
+    mode(args)
 
 
 if __name__ == '__main__':

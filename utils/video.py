@@ -19,17 +19,6 @@ def DownloadImage(videoId, path):
     data = requests.get(url).content
     open(path, 'wb').write(data)
 
-def InitialData(url):
-    html = Request(url)
-    start = html.find('var ytInitialData = ') + 20
-    end = html.find('};', start)
-    return json.loads(html[start:end] + '}')
-
-def PlaylistCount(url):
-    if not '/playlist?' in url: url = pUrl + 'UU' + url.split('/UC')[1]
-    json = InitialData(url)
-    yield J(J(json,'co'),'rt')
-
 def ContRelatedVideos(json, cont=True):
     try:
         if cont: json = J(json,'ea')
@@ -196,17 +185,3 @@ def MainThumbs(args, cont):
             videoId = split[1]
             DownloadImage(videoId, '/tmp/"' + name + ' ' + videoId + "\"")
         except: pass
-
-def Main(func, thumbs=False):
-    if thumbs:
-        if not os.path.isdir(thumbsPath): os.mkdir(thumbsPath)
-        while True:
-            video = next(func)
-            if '/channel' in video or '/playlist' in video: continue
-            split = video.split(vUrl)
-            name = split[0].replace("/","")
-            videoId = split[1]
-            print(name + vUrl + videoId) #async
-            DownloadImage(videoId, thumbsPath + '"' + name + videoId + '"')
-    else:
-        while True: print(next(func))
