@@ -249,31 +249,3 @@ def Main(func, thumbs=False):
         while True: print(next(func))
 
 def Mode(args):
-    cont = -1
-    if '-less' in args:
-        args.remove('-less')
-        cont = 0
-    elif '-cont' in args: cont = int(args[args.index('-cont') + 1])
-
-    if args[0] in ('-v'): func = MainVideos(args[1:], cont)
-    elif args[0] in ('-c'): func = PlaylistCount(args[1])
-    elif args[0] in ('-r'): func = MainRelatedVideos(args[1])
-    elif args[0] in ('-sc'): func = SearchChannel(args)
-    elif args[0] in ('-id'): func = ChannelId(args[1])
-    else:
-        if '-ads' in args:
-            args.remove('-ads')
-            global ads
-            ads = True
-        func = MainSearch(args, cont)
-
-    try:
-        if '-t' in args: Main(func,True)
-        else: Main(func)
-    except StopIteration:
-        pass
-
-if __name__ == '__main__' and len(sys.argv) > 1:
-    Mode(sys.argv[1:])
-else:
-    Help()
