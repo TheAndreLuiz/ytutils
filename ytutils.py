@@ -52,9 +52,7 @@ def mode(args):
 
 def main():
     config = Config()
-    if config.checkConfigFile():
-        config.loadConfigFile()
-    else:
+    if not config.checkConfigFile():
         config.setDefaultConfig()
 
     args = parseArguments()

@@ -6,11 +6,11 @@ class Config:
 
 
     def __init__(self):
-        pass
+        self.config = self.loadConfigFile()
 
 
-    def _getConfig(self):
-        pass
+    def get(self, config):
+        return self.config[config]
 
 
     def _setConfig(self, config):
@@ -49,19 +49,18 @@ class Config:
         self._setConfig(config)
 
 
-    def loadConfigFile():
+    def loadConfigFile(self):
+        with open('config.ini', 'r') as configFile:
+            config = configparser.ConfigParser()
+            config.read_file(configFile)
+            return config
+
+
+    def updateConfigFile(self):
         pass
 
 
-    def readConfigFile():
-        pass
-    
-
-    def updateConfigFile():
-        pass
-
-
-    def checkConfigFile():
+    def checkConfigFile(self):
         if os.path.isfile('config.ini'):
             return True
         return False
