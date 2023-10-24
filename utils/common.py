@@ -1,5 +1,5 @@
 import json
-from fetcher import Fetcher
+from .fetcher import Fetcher
 
 
 class Common:

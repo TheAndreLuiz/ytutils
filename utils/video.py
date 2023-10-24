@@ -1,23 +1,25 @@
 import json
-from utils.common import Common
-from utils.config import Config
-from utils.parser import Parser
-from utils.fetcher import Fetcher
+from .common import Common
+from .config import Config
+from .parser import Parser
+from .fetcher import Fetcher
 
 
 class Video:
 
-    #sUrl = 'https://www.youtube.com/results?search_query='
-    #tUrl = 'https://img.youtube.com/vi/{}/mqdefault.jpg'
-    #pUrl = 'https://youtube.com/playlist?list='
-    #vUrl = 'https://youtu.be/'
+    sUrl = 'https://www.youtube.com/results?search_query='
+    tUrl = 'https://img.youtube.com/vi/{}/mqdefault.jpg'
+    pUrl = 'https://youtube.com/playlist?list='
+    vUrl = 'https://youtu.be/'
 
 
     def __init__(self):
-        keyUrl = 'https://www.youtube.com/youtubei/v1/{}?key=' + self.common.getKey()
-        self.searchKey = self.keyUrl.format('search')
-        self.browseKey = self.keyUrl.format('browse')
-        self.nextKey = self.keyUrl.format('next')
+        common = Common()
+
+        keyUrl = 'https://www.youtube.com/youtubei/v1/{}?key=' + common.getKey()
+        self.searchKey = keyUrl.format('search')
+        self.browseKey = keyUrl.format('browse')
+        self.nextKey = keyUrl.format('next')
 
 
     def contRelatedVideos(self, json, cont=True):
@@ -56,9 +58,9 @@ class Video:
         for item in json:
             key = list(item)[0]
             if key == 'compactVideoRenderer':
-                videos[parser.parseJson(parser.parseJson(item,'cv'),'ts')] = vUrl + parser.parseJson(parser.parseJson(item,'cv'),'vd')
+                videos[parser.parseJson(parser.parseJson(item,'cv'),'ts')] = self.vUrl + parser.parseJson(parser.parseJson(item,'cv'),'vd')
             elif key == 'compactRadioRenderer':
-                videos[parser.parseJson(parser.parseJson(item,'ca'),'ts')] = pUrl + parser.parseJson(parser.parseJson(item,'ca'),'pd')
+                videos[parser.parseJson(parser.parseJson(item,'ca'),'ts')] = self.pUrl + parser.parseJson(parser.parseJson(item,'ca'),'pd')
         return videos
 
 
@@ -167,11 +169,10 @@ class Video:
                 args.remove(opt)
                 args.append(opts[opt])
 
-        global sUrl
-        for a in args: sUrl += a + '+'
-        sUrl = sUrl[:-1]
+        for a in args: self.sUrl += a + '+'
+        self.sUrl = self.sUrl[:-1]
 
-        json_ = common.initialData(sUrl)
+        json_ = common.initialData(self.sUrl)
         results = self.searchResults(json_, False)
         for result in results: yield result + ' ' + results[result]
         cont = self.contSearch(json_, False)
@@ -187,7 +188,7 @@ class Video:
     def mainVideos(self, args, count=-1):
         url = args[-1]
         fetcher = Fetcher()
-        if not '/playlist?' in args[-1]: url = pUrl + 'UU' + url.split('/UC')[1]
+        if not '/playlist?' in args[-1]: url = self.pUrl + 'UU' + url.split('/UC')[1]
 
         json_ = self.initialData(url)
         videos = videos(json_, False)

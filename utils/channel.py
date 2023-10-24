@@ -1,4 +1,4 @@
-from utils.common import Common
+from .common import Common
 
 
 class Channel:

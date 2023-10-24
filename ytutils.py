@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+from utils.video import Video
 from utils.config import Config
 
 
@@ -10,7 +11,7 @@ def help():
 def parseArguments():
     parser = argparse.ArgumentParser(description="Your script description")
 
-    parser.add_argument("-s", "--send", help="Send a message", nargs=2, metavar=('MESSAGE', 'DEST'))
+    parser.add_argument("-s", "--send", help="Send a message", nargs=1, metavar=('search'))
     parser.add_argument("-c", "--curses", help="Use curses", action="store_true")
     parser.add_argument("-sp", "--show-poll", help="Show poll", action="store_true")
     parser.add_argument("-sb", "--show-banner", help="Show banner", action="store_true")
@@ -36,18 +37,21 @@ def mode(args):
             filterMsg = args.filter_msg
         if args.filter_name:
             filterName = args.filter_name
-    if thumbs:
-        if not os.path.isdir(thumbsPath): os.mkdir(thumbsPath)
-        while True:
-            video = next(func)
-            if '/channel' in video or '/playlist' in video: continue
-            split = video.split(vUrl)
-            name = split[0].replace("/","")
-            videoId = split[1]
-            print(name + vUrl + videoId) #async
-            DownloadImage(videoId, thumbsPath + '"' + name + videoId + '"')
-    else:
-        while True: print(next(func))
+    video = Video()
+    video.mainSearch(args)
+
+    #if args.thumbs:
+    #    if not os.path.isdir(thumbsPath): os.mkdir(thumbsPath)
+    #    while True:
+    #        video = next(func)
+    #        if '/channel' in video or '/playlist' in video: continue
+    #        split = video.split(vUrl)
+    #        name = split[0].replace("/","")
+    #        videoId = split[1]
+    #        print(name + vUrl + videoId) #async
+    #        DownloadImage(videoId, thumbsPath + '"' + name + videoId + '"')
+    #else:
+    #    while True: print(next(func))
 
 
 def main():

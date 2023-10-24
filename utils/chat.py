@@ -1,6 +1,6 @@
 import re, sys, json, time, threading, curses.textpad, curses, requests
-from utils.config import Config
-from utils.parser import Parser
+from .config import Config
+from .parser import Parser
 from colorama import Fore, Back, Style
 
 
