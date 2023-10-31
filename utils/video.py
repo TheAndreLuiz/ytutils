@@ -15,8 +15,8 @@ class Video:
 
     def __init__(self):
         common = Common()
-
         keyUrl = 'https://www.youtube.com/youtubei/v1/{}?key=' + common.getKey()
+
         self.searchKey = keyUrl.format('search')
         self.browseKey = keyUrl.format('browse')
         self.nextKey = keyUrl.format('next')
@@ -161,7 +161,7 @@ class Video:
             cont = self.contRelatedVideos(json_)
 
 
-    def mainSearch(self, args, count=-1):
+    def search(self, args, count=-1):
         common = Common()
         opts = {'-exact':'&sp=QgIIAQ','-playlists':'&sp=EgIQAw','-channels':'&sp=EgIQAg','-date':'&sp=CAI'}
         for opt in opts:

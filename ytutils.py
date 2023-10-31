@@ -9,23 +9,26 @@ def help():
 
 
 def parseArguments():
-    parser = argparse.ArgumentParser(description="Your script description")
+    parser = argparse.ArgumentParser(description='Your script description')
 
-    parser.add_argument("-s", "--send", help="Send a message", nargs=1, metavar=('search'))
-    parser.add_argument("-c", "--curses", help="Use curses", action="store_true")
-    parser.add_argument("-sp", "--show-poll", help="Show poll", action="store_true")
-    parser.add_argument("-sb", "--show-banner", help="Show banner", action="store_true")
-    parser.add_argument("-sw", "--show-warning", help="Show warning", action="store_true")
-    parser.add_argument("-fm", "--filter-msg", help="Filter message", metavar="FILTER_MSG")
-    parser.add_argument("-fn", "--filter-name", help="Filter name", metavar="FILTER_NAME")
-    parser.add_argument("--debug", help="Test", metavar="FILTER_NAME")
+    parser.add_argument('-s', '--search', nargs='+', help='a list of strings to search for')
+    parser.add_argument('-c', '--curses', help='Use curses', action='store_true')
+    parser.add_argument('-sp', '--show-poll', help='Show poll', action='store_true')
+    parser.add_argument('-sb', '--show-banner', help='Show banner', action='store_true')
+    parser.add_argument('-sw', '--show-warning', help='Show warning', action='store_true')
+    parser.add_argument('-fm', '--filter-msg', help='Filter message', metavar='FILTER_MSG')
+    parser.add_argument('-fn', '--filter-name', help='Filter name', metavar='FILTER_NAME')
+    parser.add_argument('--debug', help='Test', metavar='FILTER_NAME')
 
     return parser.parse_args()
 
 
 def mode(args):
-    if args.send:
-        pass
+    if args.search:
+        video = Video()
+        results = video.search(args.search)
+        for result in results:
+            print(result)
     else:
         if args.show_poll:
             showPoll = True
@@ -37,8 +40,6 @@ def mode(args):
             filterMsg = args.filter_msg
         if args.filter_name:
             filterName = args.filter_name
-    video = Video()
-    video.mainSearch(args)
 
     #if args.thumbs:
     #    if not os.path.isdir(thumbsPath): os.mkdir(thumbsPath)
@@ -46,10 +47,10 @@ def mode(args):
     #        video = next(func)
     #        if '/channel' in video or '/playlist' in video: continue
     #        split = video.split(vUrl)
-    #        name = split[0].replace("/","")
+    #        name = split[0].replace('/','')
     #        videoId = split[1]
     #        print(name + vUrl + videoId) #async
-    #        DownloadImage(videoId, thumbsPath + '"' + name + videoId + '"')
+    #        DownloadImage(videoId, thumbsPath + ''' + name + videoId + ''')
     #else:
     #    while True: print(next(func))
 
