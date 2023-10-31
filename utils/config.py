@@ -21,7 +21,9 @@ class Config:
         self.config = config
 
 
-    def setDefaultConfig(self): # TODO prettfy this
+    def setDefaultConfig(self): # TODO prettfy this # TODO change color logic so no need to save Fore.
+        ytKey = 'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8'
+
         config = configparser.ConfigParser()
         config['DEFAULT'] = {
             'showMsg':'True',
@@ -44,17 +46,17 @@ class Config:
             'msgColor':'Fore.WHITE',
             'modNameColor':'Fore.BLUE',
             'membersNameColor':'Fore.GREEN',
-            'ytKey':'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8',
             'chatUrl':'https://www.youtube.com/live_chat?v=',
             'msgUrl':'https://www.youtube.com/youtubei/v1/live_chat/send_message?key={}'.format(ytKey),
             'contChatUrl': 'https://www.youtube.com/youtubei/v1/live_chat/get_live_chat?key={}'.format(ytKey),
         }
+        self._writeConfigFile(config)
         self._setConfig(config)
 
 
     def loadConfigIfOk(self):
-        config = self._readConfigFile(self)
-        if self._tryParseConfig(self, config):
+        config = self._readConfigFile()
+        if self._tryParseConfig(config):
             self._setConfig(config)
             return True
         return False
@@ -63,6 +65,7 @@ class Config:
     def updateConfigFile(self):
         pass
 
+
     def _readConfigFile(self):
         with open('config.ini', 'r') as configFile:
             config = configparser.ConfigParser()
@@ -70,8 +73,12 @@ class Config:
             return config
 
             
-    def tryParseConfig(self, config):
+    def _tryParseConfig(self, config):
+        if config.sections() == []:
+            return False
+
         config = config['DEFAULT']
+
         return config['showMsg'] in ['True', 'False'] and \
             config['showPoll'] in ['True', 'False'] and \
             config['showAuthor'] in ['True', 'False'] and \
@@ -88,3 +95,8 @@ class Config:
             config['msgColor'] is not '' and \
             config['modNameColor'] is not '' and \
             config['membersNameColor'] is not ''
+    
+
+    def _writeConfigFile(self, config): # TODO option to change config file path
+        with open('config.ini', 'w') as configFile:
+            configFile.write(str(config))

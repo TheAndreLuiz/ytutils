@@ -57,7 +57,7 @@ def mode(args):
 
 def main():
     config = Config()
-    if not config.checkConfigFile():
+    if not config.loadConfigIfOk():
         config.setDefaultConfig()
 
     args = parseArguments()

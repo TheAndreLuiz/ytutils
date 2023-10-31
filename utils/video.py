@@ -66,8 +66,9 @@ class Video:
 
     def searchResultsParser(self, item):
         config = Config()
-        ads = config.get('ads')
-        didYouMean = config.get('didYouMean')
+        print(config.getConfig())
+        ads = config.getSingleConfig('ads')
+        didYouMean = config.getSingleConfig('didYouMean')
 
         key = list(item.keys())[0]
         results = {}
