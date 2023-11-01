@@ -20,10 +20,12 @@ class Common:
 
 
     def getVideoId(self, url):
+        print('wwwwwwwwww')
+        print(self.isUrlOk(url))
         try:
             if self.isUrlOk(url):
                 return url.split('=')[-1]
-        except JSONDecodeError:
+        except:
             print('Invalid url')
             exit(0)
 
