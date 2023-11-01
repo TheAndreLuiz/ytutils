@@ -66,7 +66,6 @@ class Video:
 
     def searchResultsParser(self, item): # TODO improve this, generic parser
         config = Config()
-        print(config.getConfig())
         ads = config.getSingleConfig('ads')
         didYouMean = config.getSingleConfig('didYouMean')
 
@@ -96,7 +95,8 @@ class Video:
                 results[string + ': ' + parser.parseJson(parser.parseJson(parser.parseJson(item,'vr'),'t'),'rt')] \
                 = self.vUrl + parser.parseJson(parser.parseJson(item,'vr'),'vd')
         elif key == 'searchPyvRenderer': # do like didYouMeanRenderer
-            open('./'+key,'w').write(str(item))
+            with open('./'+key, 'w', encoding='utf-8') as f: # TODO generic this
+                f.write(str(item))
             print(item)
             print(key)
             input()
@@ -107,14 +107,14 @@ class Video:
         elif key == 'didYouMeanRenderer': print('todo') if didYouMean else print('-')
         elif key == 'showingResultsForRenderer':
             print('Mostrando resultados para: "', end=' \n')
-            open('/home/a/'+key,'w').write(str(item))
             print(key)
             input()
         elif key == 'messageRenderer': pass # No more results
         elif key == 'adSlotRenderer' and ads:
             print(item)
         else:
-            open('./'+key,'w').write(str(item))
+            with open('./'+key, 'w', encoding='utf-8') as f: # TODO generic this
+                f.write(str(item))
             print(item)
             print(key)
             input()
