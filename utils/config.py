@@ -42,6 +42,7 @@ class Config:
             'showMemberOnly':'False',
             'showBadgedNotMemberOnly':'False',
             'ads':'False',
+            'shorts':'False',
             'didYouMean':'False',
             'msgFormat':'author badges | msg',
             'badgesFormat':'[badge]',
