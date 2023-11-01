@@ -12,7 +12,7 @@ class Chat:
         self.screen = ''
 
 
-    def ContinuationData(i,json):
+    def continuationData(self, i,json):
         parser = Parser()
         j = parser.parseJson(parser.parseJson(json,i),'d')
         if list(j.keys())[0] == 'invalidationContinuationData':
@@ -22,7 +22,7 @@ class Chat:
         return j
 
 
-    def TextContent(item):
+    def textContent(self, item):
         key = list(item.keys())[0]
         parser = Parser()
         return {
@@ -31,7 +31,7 @@ class Chat:
         }.get(key)(item)
 
 
-    def Id(url):
+    def id(self, url):
         parser = Parser()
         try:
             return re.findall(ytUrlRgx, url)[0]
@@ -39,16 +39,19 @@ class Chat:
             print("Error: Invalid URL.")
 
 
-    def Banner(item):
+    def banner(self, item):
+        config = Config()
+        parser = Parser()
+        showBanner = config.getSingleConfig('showBanner')
         if not showBanner:
             return ''
         msg = ''
         for part in parser.parseJson(item,'b'):
-            msg = msg + TextContent(part)
+            msg = msg + textContent(part)
         return msg + spacingFormat + '\n'
 
 
-    def Pool(item):
+    def pool(self, item):
         entry = ''
         parser = Parser()
         for part in parser.parseJson(parser.parseJson(item,'j'),'Q'):
@@ -62,7 +65,7 @@ class Chat:
         return entry
 
 
-    def Ticker(item):
+    def ticker(self, item):
         key = list(item.keys())[0]
         parser = Parser()
         try:
@@ -83,7 +86,7 @@ class Chat:
             print(item)
 
 
-    def Msg(item):
+    def msg(self, item):
         key = list(item.keys())[0]
         parser = Parser()
         if key == 'liveChatViewerEngagementMessageRenderer' and showWarning:
@@ -127,7 +130,7 @@ class Chat:
         return ''
 
 
-    def ChatItem(item): # TODO
+    def chatItem(self, item): # TODO
         key = list(item.keys())[0]
         parser = Parser()
         if key == 'clickTrackingParams':
@@ -155,7 +158,7 @@ class Chat:
                 return item
 
 
-    def SendMsg(url, msg):
+    def sendMsg(self, url, msg):
         id = Id(url)
         parser = Parser()
         url = chatUrl.format(id)
@@ -164,7 +167,7 @@ class Chat:
         Request(msgUrl,'',msgData.format(params,msg))
 
 
-    def Scroll(top, direction, maxLines, bottom):
+    def scroll(self, top, direction, maxLines, bottom):
         if (direction == -1) and top > 0:
             top += direction
         elif (direction == 1) and (top + maxLines < bottom):
@@ -172,7 +175,7 @@ class Chat:
         return top
 
 
-    def Display(top, items, maxLines, delay):
+    def display(top, items, maxLines, delay):
         for i, item in enumerate(items[top:top + maxLines]):
             try:
                 screen.addstr(i, 0, item)
@@ -181,17 +184,17 @@ class Chat:
             time.sleep(delay)
 
 
-    def Main():
+    def show(self):
         parser = Parser()
         id = Id(sys.argv[1])
         url = chatUrl.format(id)
         json_ = initialData(url)
 
-        j = ContinuationData('f',json_)
+        j = continuationData('f',json_)
         cont = parser.parseJson(j,'c')
 
         for item in parser.parseJson(parser.parseJson(json_,'f'),'a'):
-            print(ChatItem(item), end='')
+            print(chatItem(item), end='')
 
         while True:
             request = Request(url,cont)
