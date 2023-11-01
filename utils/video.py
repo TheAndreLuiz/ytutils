@@ -182,9 +182,12 @@ class Video:
         json_ = common.initialData(self.sUrl)
         results = self.searchResults(json_, False)
         for result in results: yield result + ' ' + results[result]
+
+        fetcher = Fetcher()
+
         cont = self.contSearch(json_, False)
         while cont and count:
-            json_ = self.request(self.searchKey, cont)
+            json_ = fetcher.fetch(self.searchKey, cont)
             json_ = json.loads(json_)
             results = self.searchResults(json_)
             for result in results: yield result + ' ' + results[result]
