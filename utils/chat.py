@@ -12,6 +12,7 @@ class Chat:
     #msgData = {{"context": {{"client": {{"clientName": "WEB","clientVersion": "2.20211221.00.00"}}}},"params": "{}","richMessage": {{"textSegments": [{{"text": "{}"}}]}}}}
     #postData = {{"context":{{"client":{{"hl":"en","gl":"US","clientName":"WEB","clientVersion":"2.20211221.00.00"}}}},"continuation":"{}"}}
 
+    chatUrl = 'https://www.youtube.com/live_chat?v='
 
     def __init__(self):
         self.sleep = lambda i:time.sleep(i)
@@ -35,14 +36,6 @@ class Chat:
             'text': lambda i:parser.parseJson(i,'x'),
             'emoji': lambda i:re.sub(r'^UC+\S+','⬚', parser.parseJson(i,'e'))
         }.get(key)(item)
-
-
-    def id(self, url):
-        parser = Parser()
-        try:
-            return re.findall(self.ytUrlRgx, url)[0]
-        except:
-            print("Error: Invalid URL.")
 
 
     def banner(self, item):
@@ -184,8 +177,9 @@ class Chat:
 
 
     def sendMsg(self, url, msg):
-        id = self.id(url)
         common = Common()
+        id = common.getVideoId(url)
+
         fetcher = Fetcher()
         parser = Parser()
         url = self.chatUrl.format(id)
@@ -213,11 +207,12 @@ class Chat:
 
     def show(self):
         parser = Parser()
+        common = Common()
         fetcher = Fetcher()
 
-        id = self.id(sys.argv[1])
+        id = common.getVideoId(sys.argv[1])
         url = self.chatUrl.format(id)
-        json_ = self.initialData(url)
+        json_ = common.initialData(url)
 
         j = self.continuationData('f',json_)
         cont = parser.parseJson(j,'c')
