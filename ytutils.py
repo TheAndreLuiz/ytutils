@@ -32,7 +32,7 @@ def mode(args):
             print(result)
     elif args.chat:
         chat = Chat()
-        chat.start()
+        chat.show()
     #else:
     #    if args.show_poll:
     #        showPoll = True
