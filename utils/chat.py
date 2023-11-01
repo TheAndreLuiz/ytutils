@@ -19,7 +19,7 @@ class Chat:
         self.screen = ''
 
 
-    def continuationData(self, i,json):
+    def continuationData(self, i, json):
         parser = Parser()
         j = parser.parseJson(parser.parseJson(json,i),'d')
         if list(j.keys())[0] == 'invalidationContinuationData':

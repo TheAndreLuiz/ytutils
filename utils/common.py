@@ -24,7 +24,8 @@ class Common:
             if self.isUrlOk(url):
                 return url.split('=')[-1]
         except JSONDecodeError:
-            print('error video id')
+            print('Invalid url')
+            exit(0)
 
 
     def isUrlOk(self, url):
