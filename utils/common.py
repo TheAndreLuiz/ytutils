@@ -1,7 +1,5 @@
 import re
 import json
-
-from requests import JSONDecodeError
 from .fetcher import Fetcher
 
 
@@ -20,14 +18,10 @@ class Common:
 
 
     def getVideoId(self, url):
-        print('wwwwwwwwww')
-        print(self.isUrlOk(url))
-        try:
-            if self.isUrlOk(url):
-                return url.split('=')[-1]
-        except:
-            print('Invalid url')
-            exit(0)
+        if self.isUrlOk(url):
+            return url.split('=')[-1]
+        print('Invalid url')
+        exit(0)
 
 
     def isUrlOk(self, url):
