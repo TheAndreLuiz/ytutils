@@ -10,7 +10,7 @@ class Common:
 
 
     def __init__(self):
-        self._fetcher = Fetcher()
+        pass
 
 
     def getKey(self):
@@ -18,6 +18,7 @@ class Common:
 
 
     def getVideoId(self, url):
+        print(url)
         if self.isUrlOk(url):
             return url.split('=')[-1]
         print('Invalid url')
@@ -29,8 +30,9 @@ class Common:
 
 
     def initialData(self, url):
-        if self.isUrlOk(url):
-            html = self._fetcher.fetch(url)
-            start = html.find('var ytInitialData = ') + 20
-            end = html.find('};', start)
-            return json.loads(html[start:end] + '}')
+        fetcher = Fetcher()
+        html = fetcher.fetch(url)
+        print(html)
+        start = html.find('var ytInitialData = ') + 20
+        end = html.find('};', start)
+        return json.loads(html[start:end] + '}')

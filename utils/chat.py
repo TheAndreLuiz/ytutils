@@ -12,7 +12,7 @@ class Chat:
     #msgData = {{"context": {{"client": {{"clientName": "WEB","clientVersion": "2.20211221.00.00"}}}},"params": "{}","richMessage": {{"textSegments": [{{"text": "{}"}}]}}}}
     #postData = {{"context":{{"client":{{"hl":"en","gl":"US","clientName":"WEB","clientVersion":"2.20211221.00.00"}}}},"continuation":"{}"}}
 
-    chatUrl = 'https://www.youtube.com/live_chat?v='
+    chatUrl = 'https://www.youtube.com/live_chat?v={}'
 
     def __init__(self):
         self.sleep = lambda i:time.sleep(i)
@@ -210,7 +210,7 @@ class Chat:
         common = Common()
         fetcher = Fetcher()
 
-        id = common.getVideoId(sys.argv[1])
+        id = common.getVideoId(sys.argv[2]) # TODO maybe more sophisticated then this
         url = self.chatUrl.format(id)
         json_ = common.initialData(url)
 

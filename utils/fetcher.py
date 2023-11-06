@@ -1,6 +1,12 @@
 import requests
 
 class Fetcher:
+
+    headers = {
+        
+    }
+
+
     def __init__(self):
         self.session = requests.Session()
 
