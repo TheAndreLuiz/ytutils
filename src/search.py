@@ -98,9 +98,7 @@ class Search:
         elif key == 'searchPyvRenderer': # do like didYouMeanRenderer
             with open('./'+key, 'w', encoding='utf-8') as f: # TODO generic this
                 f.write(str(item))
-            print(item)
             print(key)
-            input()
             # if ads: # TODO fix error
             #     results['Ad: '+parser.parseJson(parser.parseJson(item,'ap'),'ts')] = self.vUrl + parser.parseJson(item,'ap')['videoId']
         elif key == 'movieRenderer': print('movie')
@@ -109,16 +107,15 @@ class Search:
         elif key == 'showingResultsForRenderer':
             print('Mostrando resultados para: "', end=' \n')
             print(key)
-            input()
         elif key == 'messageRenderer': pass # No more results
         elif key == 'adSlotRenderer' and ads:
-            print(item)
+            with open('./'+key, 'w', encoding='utf-8') as f: # TODO generic this
+                f.write(str(item))
+            print(key)
         else:
             with open('./'+key, 'w', encoding='utf-8') as f: # TODO generic this
                 f.write(str(item))
-            print(item)
             print(key)
-            input()
         return results
 
 
