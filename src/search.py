@@ -5,11 +5,12 @@ from .parser import Parser
 from .fetcher import Fetcher
 
 
-class Video:
+class Search:
 
     sUrl = 'https://www.youtube.com/results?search_query='
     tUrl = 'https://img.youtube.com/vi/{}/mqdefault.jpg'
     pUrl = 'https://youtube.com/playlist?list='
+    cUrl = 'https://www.youtube.com/channel/'
     vUrl = 'https://youtu.be/'
 
 

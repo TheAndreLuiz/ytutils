@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import argparse
-from utils.chat import Chat
-from utils.video import Video
-from utils.config import Config
+from src.chat import Chat
+from src.search import Search
+from src.config import Config
 
 
 def help():
@@ -26,8 +26,8 @@ def parseArguments():
 
 def mode(args):
     if args.search:
-        video = Video()
-        results = video.search(args.search)
+        search = Search()
+        results = search.search(args.search)
         for result in results:
             print(result)
     elif args.chat:
