@@ -13,6 +13,7 @@ def parseArguments():
     parser = argparse.ArgumentParser(description='Your script description')
 
     parser.add_argument('-s', '--search', nargs='+', help='a list of strings to search for')
+    parser.add_argument('-r', '--reverse', help='reverse search', action='store_true')
     parser.add_argument('-c', '--chat', nargs=1, help='chat')
     parser.add_argument('-sp', '--show-poll', help='Show poll', action='store_true')
     parser.add_argument('-sb', '--show-banner', help='Show banner', action='store_true')
@@ -27,7 +28,8 @@ def parseArguments():
 def mode(args):
     if args.search:
         search = Search()
-        results = search.search(args.search)
+        print(args.reverse)
+        results = search.search(args.search, args.reverse)
         for result in results:
             print(result)
     elif args.chat:

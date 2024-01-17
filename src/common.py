@@ -18,10 +18,8 @@ class Common:
 
 
     def getVideoId(self, url):
-        print(url)
         if self.isUrlOk(url):
             return url.split('=')[-1]
-        print('Invalid url')
         exit(0)
 
 
@@ -32,7 +30,6 @@ class Common:
     def initialData(self, url):
         fetcher = Fetcher()
         html = fetcher.fetch(url)
-        print(html)
         start = html.find('var ytInitialData = ') + 20
         end = html.find('};', start)
         return json.loads(html[start:end] + '}')

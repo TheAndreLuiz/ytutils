@@ -166,7 +166,17 @@ class Search:
             cont = self.contRelatedVideos(json_)
 
 
-    def search(self, args, count=-1):
+    def organizeResults(self, results, reverse):
+        if reverse:
+            reversed_keys = reversed(results.keys())
+            for key in reversed_keys:
+                yield key + ' ' + results[key]
+        else:
+            for key in results:
+                yield key + ' ' + results[key]
+        
+
+    def search(self, args, reverse, count=-1):
         common = Common()
         opts = {'-exact':'&sp=QgIIAQ','-playlists':'&sp=EgIQAw','-channels':'&sp=EgIQAg','-date':'&sp=CAI'}
         for opt in opts:
@@ -179,7 +189,7 @@ class Search:
 
         json_ = common.initialData(self.sUrl)
         results = self.searchResults(json_, False)
-        for result in results: yield result + ' ' + results[result]
+        yield from self.organizeResults(results, reverse)
 
         fetcher = Fetcher()
 
@@ -188,7 +198,7 @@ class Search:
             json_ = fetcher.fetch(self.searchKey, cont)
             json_ = json.loads(json_)
             results = self.searchResults(json_)
-            for result in results: yield result + ' ' + results[result]
+            yield from self.organizeResults(results, reverse)
             cont = self.contSearch(json_)
             count -= 1
 
