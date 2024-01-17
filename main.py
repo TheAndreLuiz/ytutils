@@ -28,7 +28,6 @@ def parseArguments():
 def mode(args):
     if args.search:
         search = Search()
-        print(args.reverse)
         results = search.search(args.search, args.reverse)
         for result in results:
             print(result)

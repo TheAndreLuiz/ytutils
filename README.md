@@ -8,3 +8,5 @@ make all methods private except the ones used by other classes
 video info
 smol search with option for many results
 change mainVideo, mainChannel, names
+separate search and print
+support other url formats https://youtu.be/TeJT-RDzi2c

@@ -17,7 +17,7 @@ class Common:
         return self._key
 
 
-    def getVideoId(self, url):
+    def getVideoId(self, url): # TODO support other formats
         if self.isUrlOk(url):
             return url.split('=')[-1]
         exit(0)
@@ -27,9 +27,13 @@ class Common:
         return re.match(self._ytUrlRegex, url) is not None
 
 
-    def initialData(self, url):
+    def initialData(self, url): # TODO parameter to show html
         fetcher = Fetcher()
         html = fetcher.fetch(url)
+
+        with open('test.html', 'w') as f:
+            f.write(html)
+
         start = html.find('var ytInitialData = ') + 20
         end = html.find('};', start)
         return json.loads(html[start:end] + '}')
