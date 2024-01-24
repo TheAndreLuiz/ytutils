@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+import subprocess
 from src.chat import Chat
 from src.search import Search
 from src.config import Config
@@ -14,6 +15,7 @@ def parseArguments():
 
     parser.add_argument('-s', '--search', nargs='+', help='a list of strings to search for')
     parser.add_argument('-r', '--reverse', help='reverse search', action='store_true')
+    parser.add_argument('-m', '--mpv', help='reverse search', action='store_true')
     parser.add_argument('-c', '--chat', nargs=1, help='chat')
     parser.add_argument('-sp', '--show-poll', help='Show poll', action='store_true')
     parser.add_argument('-sb', '--show-banner', help='Show banner', action='store_true')
@@ -29,6 +31,12 @@ def mode(args):
     if args.search:
         search = Search()
         results = search.search(args.search, args.reverse)
+
+        if args.mpv and results:
+            firstResult = next(results, None)
+            url = firstResult.split(' ')[-1]
+            subprocess.run(['mpv'] + ['--no-video', url], capture_output=False, text=True)
+            exit()
         for result in results:
             print(result)
     elif args.chat:

@@ -27,13 +27,9 @@ class Common:
         return re.match(self._ytUrlRegex, url) is not None
 
 
-    def initialData(self, url): # TODO parameter to show html
+    def initialData(self, url):
         fetcher = Fetcher()
         html = fetcher.fetch(url)
-
-        with open('test.html', 'w') as f:
-            f.write(html)
-
         start = html.find('var ytInitialData = ') + 20
         end = html.find('};', start)
         return json.loads(html[start:end] + '}')
