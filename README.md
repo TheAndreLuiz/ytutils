@@ -10,3 +10,4 @@ smol search with option for many results
 change mainVideo, mainChannel, names
 separate search and print
 support other url formats https://youtu.be/TeJT-RDzi2c
+add random
